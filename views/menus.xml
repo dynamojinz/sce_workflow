@@ -1,0 +1,14 @@
+<odoo>
+  <data>
+    <!-- Top menu item -->
+    <menuitem name="Workflow" id="sce_workflow.workflow_root" groups="base.group_system"/>
+    <menuitem name="Approval" id="sce_workflow.approval_root"/>
+    <!-- menu categories -->
+    <menuitem name="Workflow" id="sce_workflow.workflow" parent="sce_workflow.workflow_root" action="sce_workflow.workflow_window" sequence="80" groups="base.group_system"/>
+    <menuitem name="Process" id="sce_workflow.process" parent="sce_workflow.workflow_root" action="sce_workflow.process_window" sequence="90" groups="base.group_system"/>
+    <!-- approval -->
+    <menuitem name="Comming Approvals" id="sce_workflow.approval_comming" parent="sce_workflow.approval_root" action="sce_workflow.approval_window" sequence="80"/>
+    <menuitem name="My Requests" id="sce_workflow.approval_request" parent="sce_workflow.approval_root" action="sce_workflow.my_process_window" sequence="90"/>
+    <!-- actions -->
+  </data>
+</odoo>

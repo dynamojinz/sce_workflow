@@ -1,0 +1,55 @@
+<odoo>
+  <data>
+    <!-- explicit list view definition -->
+    <record model="ir.ui.view" id="sce_workflow.workflow_list">
+      <field name="name">Workflow list</field>
+      <field name="model">sce_workflow.workflow</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="name"/>
+          <field name="res_model_id"/>
+          <field name="res_model"/>
+        </tree>
+      </field>
+    </record>
+
+    <record model="ir.ui.view" id="sce_workflow.workflow_form">
+      <field name="name">Workflow form</field>
+      <field name="model">sce_workflow.workflow</field>
+      <field name="arch" type="xml">
+        <form>
+          <sheet>
+              <group>
+                  <group>
+                      <field name="name"/>
+                      <field name="res_model_id"/>
+                      <field name="res_model"/>
+                  </group>
+                  <group>
+                      <field name="start_action_id"/>
+                      <field name="finish_action_id"/>
+                      <field name="abort_action_id"/>
+                  </group>
+              </group>
+              <group>
+                  <field name="workitem_ids">
+                      <tree string="workitems">
+                          <field name="sequence" widget="handle"/>
+                          <field name="name"/>
+                          <field name="type"/>
+                      </tree>
+                  </field>
+              </group>
+          </sheet>
+        </form>
+      </field>
+    </record>
+
+    <!-- actions opening views on models -->
+    <record model="ir.actions.act_window" id="sce_workflow.workflow_window">
+      <field name="name">Workflow</field>
+      <field name="res_model">sce_workflow.workflow</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+  </data>
+</odoo>

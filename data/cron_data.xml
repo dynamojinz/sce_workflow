@@ -1,0 +1,15 @@
+<odoo>
+  <data>
+      <record id="ir_cron_sce_process_proceed" model="ir.cron">
+          <field name="name">Process: proceed active processes</field>
+          <field name="model_id" ref="model_sce_workflow_process"/>
+          <field name="state">code</field>
+          <field name="code">model.proceed_active_process()</field>
+          <field name="user_id" ref="base.user_root"/>
+          <field name="interval_number">5</field>
+          <field name="interval_type">minutes</field>
+          <field name="numbercall">-1</field>
+          <field name="doall" eval="False"/>
+      </record>
+  </data>
+</odoo>

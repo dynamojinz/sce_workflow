@@ -1,2 +1,3 @@
-# sce_workflow
-Designed mainly for approval flow.
+SCE Workflow Engine.
+================================
+Designed mainly for approval Workflow.

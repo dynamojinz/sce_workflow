@@ -1,0 +1,7 @@
+<odoo>
+    <data>
+        <record model="res.groups" id="workflow_admin">
+            <field name="name">Workflow / Administrator</field>
+        </record>
+    </data>
+</odoo>

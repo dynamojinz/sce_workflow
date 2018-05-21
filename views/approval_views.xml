@@ -1,0 +1,87 @@
+<odoo>
+  <data>
+    <!-- explicit list view definition -->
+    <record model="ir.ui.view" id="sce_workflow.approval_list">
+      <field name="name">Approvals</field>
+      <field name="model">sce_workflow.approval</field>
+      <field name="arch" type="xml">
+        <tree default_order="create_date desc" decoration-success="state=='pending'" decoration-warning="state=='rejected'" create="false" delete="false">
+          <field name="name"/>
+          <field name="requester_id"/>
+          <field name="approver_id"/>
+          <field name="state"/>
+          <field name="approve_datetime"/>
+        </tree>
+      </field>
+    </record>
+
+    <!-- search view -->
+    <record model="ir.ui.view" id="sce_workflow.approval_filter">
+      <field name="name">Approval.filters</field>
+      <field name="model">sce_workflow.approval</field>
+      <field name="arch" type="xml">
+        <search string="Approval Filters">
+          <filter name="pending" string="Pending" domain="[('state', '=', 'pending')]"/>
+        </search>
+      </field>
+    </record>
+
+    <!-- form view -->
+    <record model="ir.ui.view" id="sce_workflow.approval_form">
+      <field name="name">Approval Form</field>
+      <field name="model">sce_workflow.approval</field>
+      <field name="arch" type="xml">
+        <form edit="false" create="false" delete="false">
+            <header>
+                <button name="action_approve" type="object" string="Approve" class="oe_highlight"
+                    confirm="Approve this request?" attrs="{'invisible':['|',('state','!=','pending'),('is_active','=',False)]}"/>
+                <button name="action_reject" type="object" string="Reject" class="oe_highlight" 
+                    confirm="Reject this request?" attrs="{'invisible':['|',('state','!=','pending'),('is_active','=',False)]}"/>
+                <field name="state" widget="statusbar" readonly="1"/>
+            </header>
+            <sheet>
+                <div class="oe_title">
+                    <h1><field name="name"/></h1>
+                </div>
+                <group>
+                  <group>
+                      <field name="requester_id"/>
+                      <field name="approver_id"/>
+                      <field name="res_model"/>
+                  </group>
+                  <group>
+                      <field name="is_active"/>
+                      <field name="approve_datetime"/>
+                      <field name="res_id"/>
+                  </group>
+                </group>
+                <div>
+                  <label for="action_view" string="View Data"/>
+                  <button name="action_view" type="object" class="oe_highlight">
+                      <field name="res_model_name"/>
+                  </button>
+              </div>
+           </sheet>
+        </form>
+      </field>
+    </record>
+
+
+    <!-- actions opening views on models -->
+    <record model="ir.actions.act_window" id="sce_workflow.approval_window">
+      <field name="name">sce_workflow.approval_window</field>
+      <field name="res_model">sce_workflow.approval</field>
+      <field name="view_mode">tree,form</field>
+      <field name="context">{'search_default_pending':1}</field>
+      <field name="domain">[('approver_id','=',uid)]</field>
+    </record>
+
+    <record model="ir.actions.act_window" id="sce_workflow.my_process_window">
+      <field name="name">sce_workflow.my_process_window</field>
+      <field name="res_model">sce_workflow.process</field>
+      <field name="view_mode">tree,form</field>
+      <field name="context">{'search_default_started':1}</field>
+      <field name="domain">[('start_person_id','=',uid)]</field>
+    </record>
+  </data>
+</odoo>

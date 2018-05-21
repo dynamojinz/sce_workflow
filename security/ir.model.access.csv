@@ -1,0 +1,6 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_sce_workflow_workflow,sce_workflow.workflow,model_sce_workflow_workflow,,1,0,0,0
+access_sce_workflow_workitem,sce_workflow.workitem,model_sce_workflow_workitem,,1,0,0,0
+access_sce_workflow_process,sce_workflow.process,model_sce_workflow_process,,1,0,0,0
+access_sce_workflow_approval,sce_workflow.approval,model_sce_workflow_approval,,1,0,0,0
+
