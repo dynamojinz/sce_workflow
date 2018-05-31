@@ -29,17 +29,21 @@ class Approval(models.Model):
 
     def action_approve(self):
         for record in self:
-            record = record.sudo()
-            record.state = 'approved'
-            record.approve_datetime = fields.Datetime.now()
-            record.is_active = False
+            if record.approver_id == self.env.user:
+                record = record.sudo()
+                record.state = 'approved'
+                record.approve_datetime = fields.Datetime.now()
+                record.is_active = False
+            # Check approver is self
 
     def action_reject(self):
         for record in self:
-            record = record.sudo()
-            record.state = 'rejected'
-            record.approve_datetime = fields.Datetime.now()
-            record.is_active = False
+            if record.approver_id == self.env.user:
+                record = record.sudo()
+                record.state = 'rejected'
+                record.approve_datetime = fields.Datetime.now()
+                record.is_active = False
+            # Check approver is self
 
     def action_view(self):
         self.ensure_one()
