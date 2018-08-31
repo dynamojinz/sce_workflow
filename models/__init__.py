@@ -1,3 +1,2 @@
 # -*- coding: utf-8 -*-
-
-from . import workflow, process, approval
+from . import workflow, process, approval, role

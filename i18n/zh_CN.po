@@ -6,16 +6,33 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 11.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-05-21 11:58+0000\n"
-"PO-Revision-Date: 2018-05-21 20:12+0800\n"
+"POT-Creation-Date: 2018-08-30 06:19+0000\n"
+"PO-Revision-Date: 2018-08-30 14:31+0800\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Poedit 2.0.4\n"
+"X-Generator: Poedit 2.0.8\n"
 "Last-Translator: \n"
 "Language: zh\n"
+
+#. module: sce_workflow
+#: code:addons/sce_workflow/models/process.py:204
+#, python-format
+msgid ""
+"## Title: %s\n"
+"- Requester: %s"
+msgstr ""
+"##  您有新的审批，请及时查看：\n"
+"- 标题: %s\n"
+"- 申请人: %s"
+
+#. module: sce_workflow
+#: code:addons/sce_workflow/models/process.py:203
+#, python-format
+msgid "A new approval is arrived"
+msgstr "您有新的审批"
 
 #. module: sce_workflow
 #: model:ir.model.fields,field_description:sce_workflow.field_sce_workflow_workflow_abort_action_id
@@ -39,15 +56,15 @@ msgstr ""
 
 #. module: sce_workflow
 #: model:ir.ui.menu,name:sce_workflow.approval_root
-#: selection:sce_workflow.workitem,type:0
 msgid "Approval"
 msgstr "审批"
 
 #. module: sce_workflow
 #: model:ir.model.fields,field_description:sce_workflow.field_sce_area_area_state_approval_button_submit
 #: model:ir.model.fields,field_description:sce_workflow.field_sce_workflow_approval_mixin_approval_button_submit
+#, fuzzy
 msgid "Approval Button Submit"
-msgstr ""
+msgstr "发起审批"
 
 #. module: sce_workflow
 #: model:ir.ui.view,arch_db:sce_workflow.approval_filter
@@ -62,14 +79,27 @@ msgstr "审批锁"
 
 #. module: sce_workflow
 #: model:ir.model,name:sce_workflow.model_sce_workflow_approval_mixin
+#, fuzzy
 msgid "Approval Mixin"
-msgstr ""
+msgstr "审批"
 
 #. module: sce_workflow
 #: model:ir.model.fields,field_description:sce_workflow.field_sce_area_area_state_approval_process_id
 #: model:ir.model.fields,field_description:sce_workflow.field_sce_workflow_approval_mixin_approval_process_id
 msgid "Approval Process"
 msgstr "审批流程"
+
+#. module: sce_workflow
+#: selection:sce_workflow.workitem,type:0
+#, fuzzy
+msgid "Approval(Person)"
+msgstr "审批"
+
+#. module: sce_workflow
+#: selection:sce_workflow.workitem,type:0
+#, fuzzy
+msgid "Approval(Role)"
+msgstr "审批"
 
 #. module: sce_workflow
 #: model:ir.model.fields,field_description:sce_workflow.field_sce_workflow_process_approval_ids
@@ -79,7 +109,7 @@ msgstr "审批"
 #. module: sce_workflow
 #: model:ir.ui.view,arch_db:sce_workflow.approval_form
 msgid "Approve"
-msgstr "审批"
+msgstr "同意"
 
 #. module: sce_workflow
 #: model:ir.model.fields,field_description:sce_workflow.field_sce_workflow_approval_approve_datetime
@@ -112,6 +142,12 @@ msgid "Condition"
 msgstr "触发条件"
 
 #. module: sce_workflow
+#: model:ir.model.fields,field_description:sce_workflow.field_sce_workflow_approval_content_url
+#, fuzzy
+msgid "Content Url"
+msgstr "印章内容"
+
+#. module: sce_workflow
 #: selection:sce_workflow.process,state:0
 msgid "Created"
 msgstr "已创建"
@@ -119,6 +155,8 @@ msgstr "已创建"
 #. module: sce_workflow
 #: model:ir.model.fields,field_description:sce_workflow.field_sce_workflow_approval_create_uid
 #: model:ir.model.fields,field_description:sce_workflow.field_sce_workflow_process_create_uid
+#: model:ir.model.fields,field_description:sce_workflow.field_sce_workflow_role_create_uid
+#: model:ir.model.fields,field_description:sce_workflow.field_sce_workflow_role_line_create_uid
 #: model:ir.model.fields,field_description:sce_workflow.field_sce_workflow_workflow_create_uid
 #: model:ir.model.fields,field_description:sce_workflow.field_sce_workflow_workitem_create_uid
 #: model:ir.model.fields,field_description:sce_workflow.field_sce_workflow_worknode_create_uid
@@ -128,6 +166,8 @@ msgstr "创建者"
 #. module: sce_workflow
 #: model:ir.model.fields,field_description:sce_workflow.field_sce_workflow_approval_create_date
 #: model:ir.model.fields,field_description:sce_workflow.field_sce_workflow_process_create_date
+#: model:ir.model.fields,field_description:sce_workflow.field_sce_workflow_role_create_date
+#: model:ir.model.fields,field_description:sce_workflow.field_sce_workflow_role_line_create_date
 #: model:ir.model.fields,field_description:sce_workflow.field_sce_workflow_workflow_create_date
 #: model:ir.model.fields,field_description:sce_workflow.field_sce_workflow_workitem_create_date
 #: model:ir.model.fields,field_description:sce_workflow.field_sce_workflow_worknode_create_date
@@ -141,9 +181,16 @@ msgid "Current Workitem"
 msgstr "当前工作项"
 
 #. module: sce_workflow
+#: selection:sce_workflow.role,role_type:0
+msgid "Department Range"
+msgstr "部门范围"
+
+#. module: sce_workflow
 #: model:ir.model.fields,field_description:sce_workflow.field_sce_workflow_approval_display_name
 #: model:ir.model.fields,field_description:sce_workflow.field_sce_workflow_approval_mixin_display_name
 #: model:ir.model.fields,field_description:sce_workflow.field_sce_workflow_process_display_name
+#: model:ir.model.fields,field_description:sce_workflow.field_sce_workflow_role_display_name
+#: model:ir.model.fields,field_description:sce_workflow.field_sce_workflow_role_line_display_name
 #: model:ir.model.fields,field_description:sce_workflow.field_sce_workflow_workflow_display_name
 #: model:ir.model.fields,field_description:sce_workflow.field_sce_workflow_workitem_display_name
 #: model:ir.model.fields,field_description:sce_workflow.field_sce_workflow_worknode_display_name
@@ -169,6 +216,8 @@ msgstr "已通过"
 #: model:ir.model.fields,field_description:sce_workflow.field_sce_workflow_approval_id
 #: model:ir.model.fields,field_description:sce_workflow.field_sce_workflow_approval_mixin_id
 #: model:ir.model.fields,field_description:sce_workflow.field_sce_workflow_process_id
+#: model:ir.model.fields,field_description:sce_workflow.field_sce_workflow_role_id
+#: model:ir.model.fields,field_description:sce_workflow.field_sce_workflow_role_line_id
 #: model:ir.model.fields,field_description:sce_workflow.field_sce_workflow_workflow_id
 #: model:ir.model.fields,field_description:sce_workflow.field_sce_workflow_workitem_id
 #: model:ir.model.fields,field_description:sce_workflow.field_sce_workflow_worknode_id
@@ -184,6 +233,8 @@ msgstr "是否有效"
 #: model:ir.model.fields,field_description:sce_workflow.field_sce_workflow_approval___last_update
 #: model:ir.model.fields,field_description:sce_workflow.field_sce_workflow_approval_mixin___last_update
 #: model:ir.model.fields,field_description:sce_workflow.field_sce_workflow_process___last_update
+#: model:ir.model.fields,field_description:sce_workflow.field_sce_workflow_role___last_update
+#: model:ir.model.fields,field_description:sce_workflow.field_sce_workflow_role_line___last_update
 #: model:ir.model.fields,field_description:sce_workflow.field_sce_workflow_workflow___last_update
 #: model:ir.model.fields,field_description:sce_workflow.field_sce_workflow_workitem___last_update
 #: model:ir.model.fields,field_description:sce_workflow.field_sce_workflow_worknode___last_update
@@ -193,6 +244,8 @@ msgstr "最新修改时间"
 #. module: sce_workflow
 #: model:ir.model.fields,field_description:sce_workflow.field_sce_workflow_approval_write_uid
 #: model:ir.model.fields,field_description:sce_workflow.field_sce_workflow_process_write_uid
+#: model:ir.model.fields,field_description:sce_workflow.field_sce_workflow_role_line_write_uid
+#: model:ir.model.fields,field_description:sce_workflow.field_sce_workflow_role_write_uid
 #: model:ir.model.fields,field_description:sce_workflow.field_sce_workflow_workflow_write_uid
 #: model:ir.model.fields,field_description:sce_workflow.field_sce_workflow_workitem_write_uid
 #: model:ir.model.fields,field_description:sce_workflow.field_sce_workflow_worknode_write_uid
@@ -202,6 +255,8 @@ msgstr "最新修改人"
 #. module: sce_workflow
 #: model:ir.model.fields,field_description:sce_workflow.field_sce_workflow_approval_write_date
 #: model:ir.model.fields,field_description:sce_workflow.field_sce_workflow_process_write_date
+#: model:ir.model.fields,field_description:sce_workflow.field_sce_workflow_role_line_write_date
+#: model:ir.model.fields,field_description:sce_workflow.field_sce_workflow_role_write_date
 #: model:ir.model.fields,field_description:sce_workflow.field_sce_workflow_workflow_write_date
 #: model:ir.model.fields,field_description:sce_workflow.field_sce_workflow_workitem_write_date
 #: model:ir.model.fields,field_description:sce_workflow.field_sce_workflow_worknode_write_date
@@ -216,6 +271,7 @@ msgstr "我的流程"
 #. module: sce_workflow
 #: model:ir.model.fields,field_description:sce_workflow.field_sce_workflow_approval_name
 #: model:ir.model.fields,field_description:sce_workflow.field_sce_workflow_process_name
+#: model:ir.model.fields,field_description:sce_workflow.field_sce_workflow_role_name
 #: model:ir.model.fields,field_description:sce_workflow.field_sce_workflow_workflow_name
 #: model:ir.model.fields,field_description:sce_workflow.field_sce_workflow_workitem_name
 #: model:ir.model.fields,field_description:sce_workflow.field_sce_workflow_worknode_name
@@ -249,6 +305,12 @@ msgid "Person"
 msgstr "人员"
 
 #. module: sce_workflow
+#: model:ir.model.fields,field_description:sce_workflow.field_sce_workflow_role_line_person_range_ids
+#: selection:sce_workflow.role,role_type:0
+msgid "Person Range"
+msgstr "申请人范围"
+
+#. module: sce_workflow
 #: model:ir.actions.act_window,name:sce_workflow.process_window
 #: model:ir.model.fields,field_description:sce_workflow.field_sce_workflow_approval_process_id
 #: model:ir.ui.menu,name:sce_workflow.process
@@ -270,7 +332,7 @@ msgstr "流程日志"
 #: model:ir.cron,cron_name:sce_workflow.ir_cron_sce_process_proceed
 #: model:ir.cron,name:sce_workflow.ir_cron_sce_process_proceed
 msgid "Process: proceed active processes"
-msgstr ""
+msgstr "流程：处理进行中的流程"
 
 #. module: sce_workflow
 #: model:ir.ui.view,arch_db:sce_workflow.approval_form
@@ -310,7 +372,12 @@ msgstr "申请人"
 #. module: sce_workflow
 #: model:ir.model.fields,field_description:sce_workflow.field_sce_workflow_process_res_id
 msgid "Res"
-msgstr ""
+msgstr "关联"
+
+#. module: sce_workflow
+#: model:ir.model.fields,field_description:sce_workflow.field_sce_workflow_role_res_module_id
+msgid "Res Module"
+msgstr "关联模块"
 
 #. module: sce_workflow
 #: model:ir.model.fields,field_description:sce_workflow.field_sce_workflow_approval_res_id
@@ -331,10 +398,36 @@ msgid "Resource Model Name"
 msgstr "关联模型名称"
 
 #. module: sce_workflow
-#: code:addons/sce_workflow/models/approval.py:69
+#: code:addons/sce_workflow/models/approval.py:77
 #, python-format
 msgid "Resubmit Approval"
 msgstr "重新提交审批"
+
+#. module: sce_workflow
+#: model:ir.model.fields,field_description:sce_workflow.field_sce_workflow_role_line_role_id
+#: model:ir.model.fields,field_description:sce_workflow.field_sce_workflow_workitem_role_ids
+msgid "Role"
+msgstr "角色"
+
+#. module: sce_workflow
+#: model:ir.model.fields,field_description:sce_workflow.field_sce_workflow_role_line_role_person_id
+msgid "Role Person"
+msgstr "角结确定人"
+
+#. module: sce_workflow
+#: model:ir.model.fields,field_description:sce_workflow.field_sce_workflow_role_role_type
+msgid "Role Type"
+msgstr "角色类型"
+
+#. module: sce_workflow
+#: model:ir.model.fields,field_description:sce_workflow.field_sce_workflow_role_roleline_ids
+msgid "Roleline"
+msgstr "角色线"
+
+#. module: sce_workflow
+#: model:ir.ui.menu,name:sce_workflow.role
+msgid "Roles"
+msgstr "角色"
 
 #. module: sce_workflow
 #: model:ir.model.fields,field_description:sce_workflow.field_sce_workflow_workitem_sequence
@@ -371,10 +464,15 @@ msgid "State"
 msgstr "状态"
 
 #. module: sce_workflow
-#: code:addons/sce_workflow/models/approval.py:71
+#: code:addons/sce_workflow/models/approval.py:79
 #, python-format
 msgid "Submit Approval"
 msgstr "发起审批"
+
+#. module: sce_workflow
+#: model:ir.model.fields,field_description:sce_workflow.field_sce_workflow_role_res_module_name
+msgid "Technical Name"
+msgstr "技术名称"
 
 #. module: sce_workflow
 #: model:ir.model.fields,field_description:sce_workflow.field_sce_workflow_workitem_type
@@ -405,6 +503,11 @@ msgid "Workitems"
 msgstr "工作项"
 
 #. module: sce_workflow
+#: model:ir.actions.act_window,name:sce_workflow.role_window
+msgid "action.workflow.role.window"
+msgstr ""
+
+#. module: sce_workflow
 #: model:ir.model,name:sce_workflow.model_sce_workflow_approval
 msgid "sce_workflow.approval"
 msgstr "审批"
@@ -425,6 +528,16 @@ msgid "sce_workflow.process"
 msgstr "流程"
 
 #. module: sce_workflow
+#: model:ir.model,name:sce_workflow.model_sce_workflow_role
+msgid "sce_workflow.role"
+msgstr "角色"
+
+#. module: sce_workflow
+#: model:ir.model,name:sce_workflow.model_sce_workflow_role_line
+msgid "sce_workflow.role.line"
+msgstr "角色线"
+
+#. module: sce_workflow
 #: model:ir.model,name:sce_workflow.model_sce_workflow_workflow
 msgid "sce_workflow.workflow"
 msgstr "工作流"
@@ -436,10 +549,12 @@ msgstr "工作项"
 
 #. module: sce_workflow
 #: model:ir.model,name:sce_workflow.model_sce_workflow_worknode
+#, fuzzy
 msgid "sce_workflow.worknode"
-msgstr ""
+msgstr "节点"
 
 #. module: sce_workflow
 #: model:ir.ui.view,arch_db:sce_workflow.workflow_form
+#, fuzzy
 msgid "workitems"
 msgstr "工作项"

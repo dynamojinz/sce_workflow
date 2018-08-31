@@ -17,11 +17,13 @@ class Approval(models.Model):
         ('rejected', 'Rejected'),
         ], default='pending')
     approve_datetime = fields.Datetime()
-    is_active = fields.Boolean()
+    is_active = fields.Boolean(default=True)
     # Related model
     res_model = fields.Char(string='Resource Model', related='process_id.res_model', store=True, index=True, readonly=True)
     res_id = fields.Integer(string="Resource ID", related='process_id.res_id', store=True, readonly=True)
     res_model_name = fields.Char(String='Resource Model Name', related='process_id.res_model_name', store=True, readonly=True)
+    # Payload
+    content_url = fields.Char()
 
     def _compute_name(self):
         for record in self:
@@ -33,7 +35,8 @@ class Approval(models.Model):
                 record = record.sudo()
                 record.state = 'approved'
                 record.approve_datetime = fields.Datetime.now()
-                record.is_active = False
+                record.process_id.proceed()
+                # record.is_active = False
             # Check approver is self
 
     def action_reject(self):
@@ -42,7 +45,8 @@ class Approval(models.Model):
                 record = record.sudo()
                 record.state = 'rejected'
                 record.approve_datetime = fields.Datetime.now()
-                record.is_active = False
+                record.process_id.proceed()
+                # record.is_active = False
             # Check approver is self
 
     def action_view(self):
@@ -79,7 +83,8 @@ class ApprovalMixin(models.AbstractModel):
         self.ensure_one()
         # Get related workflow
         if self.approval_process_id:
-            pass  # TODO  restart process
+            # Restart process
+            self.sudo().approval_process_id.restart()
         else:
             workflow = self.env['sce_workflow.workflow'].search([('res_model','=',self._name)])
             #TODO: check only one workflow, else do something.
@@ -100,6 +105,11 @@ class ApprovalMixin(models.AbstractModel):
                 'res_model': 'sce_workflow.process',
                 'res_id': self.approval_process_id.id,
                 }
+
+    # Need to be overide by Actual class
+    def approval_get_content_url(self):
+        return False
+
 
 
 

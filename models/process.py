@@ -6,6 +6,7 @@ from odoo.exceptions import MissingError
 
 class Process(models.Model):
     _name = 'sce_workflow.process'
+    _inherit='sce_dingtalk.mixin'
 
     name = fields.Char(compute='_compute_name')
     workflow_id = fields.Many2one('sce_workflow.workflow', string='Workflow')
@@ -64,6 +65,20 @@ class Process(models.Model):
                     record._proceed()
 
     @api.multi
+    def restart(self):
+        for record in self:
+            if record.state == 'aborted':
+                workitem = record.workflow_id.get_start_workitem()
+                if workitem:
+                    record.current_workitem_id = workitem
+                    record._log("Process restarted.")
+                    record.state = 'started'
+                    model = self.env[record.res_model].browse(record.res_id)
+                    if model.exists():
+                        model.write({'approval_lock': True})
+                    record._proceed()
+
+    @api.multi
     def proceed(self):
         for record in self:
             if record.state == 'started':
@@ -75,11 +90,12 @@ class Process(models.Model):
 
     def _proceed(self):
         self.ensure_one()
-        print(self.current_workitem_id)
         if self.current_workitem_id == False or len(self.current_workitem_id)==0:
             rt = 'finish'
         elif self.current_workitem_id.type == 'approval':
-            rt = self._proceed_approval(self.current_workitem_id)
+            rt = self._proceed_approval_person(self.current_workitem_id)
+        elif self.current_workitem_id.type == 'approval_role':
+            rt = self._proceed_approval_role(self.current_workitem_id)
         elif self.current_workitem_id.type == 'action':
             rt = 'finish' #TODO Adding action codes
         else:
@@ -88,31 +104,42 @@ class Process(models.Model):
         if rt == 'finish':
             self.state = 'finished'
             self._log("Process finished")
+            # TODO: Close pending approvals
         elif rt == 'walk':
            workitem = self.workflow_id.get_next_workitem(self.current_workitem_id)
            self.current_workitem_id = workitem
            self.proceed()
         elif rt == 'abort':
+            self.approval_ids.write({'is_active':False})
             self.state = 'aborted'
             self._log("Process aborted")
+            # TODO: Close pending approvals
             model = self.env[self.res_model].browse(self.res_id)
             if model.exists():
                 model.write({'approval_lock': False})
         else: # wait , etc..
             pass
 
-    def _proceed_approval(self, workitem):
-        if len(workitem.person_ids)<1:
+    def _proceed_approval_person(self, workitem):
+        return self._proceed_approval(workitem, workitem.person_ids)
+
+    def _proceed_approval_role(self, workitem):
+        person_list = workitem.role_ids.get_person_ids_by_person(self.start_person_id)
+        return self._proceed_approval(workitem, person_list)
+
+    def _proceed_approval(self, workitem, person_list):
+        if len(person_list)<1:
             self._log("Workitem %s: Approval person list empty, skiped")
             return 'walk'
-        approvals = self.env['sce_workflow.approval'].search([('process_id','=',self.id),('workitem_id','=',workitem.id)])
+        approvals = self.env['sce_workflow.approval'].search([('process_id','=',self.id),('workitem_id','=',workitem.id),('is_active','=',True)])
         if len(approvals) >0:
             # Has approvals
             if workitem.parallel_type == 'OR':
                 all_reject = True
                 for approval in approvals:
                     if approval.state == 'approved':
-                        approvals.write({'is_active':False})
+                        # approvals.write({'is_active':False})
+                        approvals.filtered(lambda x:x.state=='pending').write({'is_active':False})
                         self._log(
                                 "Workitem %s: Approved by %s at %s(Need one approve)." % (
                                     workitem.name, 
@@ -123,7 +150,7 @@ class Process(models.Model):
                         all_reject = False
                 else:
                     if all_reject:
-                        approvals.write({'is_active':False})
+                        # approvals.write({'is_active':False})
                         self._log(
                                 "Workitem %s: Rejected by all approvers.(Need one approve)." % (
                                     workitem.name,))
@@ -134,7 +161,8 @@ class Process(models.Model):
                 all_approve = True
                 for approval in approvals:
                     if approval.state == 'rejected':
-                        approvals.write({'is_active':False})
+                        # approvals.write({'is_active':False})
+                        approvals.filtered(lambda x:x.state=='pending').write({'is_active':False})
                         self._log(
                                 "Workitem %s: Rejected by %s at %s(Need all approve)." % (
                                     workitem.name,
@@ -145,7 +173,7 @@ class Process(models.Model):
                         all_approve = False
                 else:
                     if all_approve:
-                        approvals.write({'is_active':False})
+                        # approvals.write({'is_active':False})
                         self._log(
                                 "Workitem %s: Approved by all approvers.(Need all approve)." % (
                                     workitem.name,))
@@ -153,15 +181,40 @@ class Process(models.Model):
                     else:
                         return 'wait'
         else:
-            for person in workitem.person_ids:
-                approvals.create({
-                    'process_id': self.id,
-                    'requester_id': self.start_person_id.id,
-                    'approver_id': person.id,
-                    'workitem_id': workitem.id,
-                    'is_active': True,
-                    })
+            for person in person_list:
+                model = self.env[self.res_model].browse(self.res_id)
+                if model:
+                    content_url = model.approval_get_content_url()
+                else:
+                    content_url = False
+                self._create_approval(person, workitem, content_url)
             return 'wait'
+
+    def _create_approval(self, approver, workitem, content_url):
+        approval = self.env['sce_workflow.approval'].create({
+            'process_id': self.id,
+            'requester_id': self.start_person_id.id,
+            'approver_id': approver.id,
+            'workitem_id': workitem.id,
+            'is_active': True,
+            'content_url': content_url,
+            })
+        if approval and approver:
+            title = _("A new approval is arrived")
+            markdown = _("## Title: %s\n- Requester: %s") % (self.name, self.start_person_id.name)
+            # url = "http://cs.sce-re.com:8049/sce_designlib/fault/%d" % (self.id)
+            redirect = "/web#id=%d&view_type=form&model=sce_workflow.approval&menu_id=%d&action=%d" % (
+                    approval.id, 
+                    self.env.ref("sce_workflow.approval_comming").id,
+                    self.env.ref("sce_workflow.approval_window").id)
+            # url = "http://localhost:8069/sce_dingtalk/oauth/script/%s?redirect=%s" % (self._name, urllib.parse.quote(redirect),)
+            user = approver.login.split("@")[0]
+            # print(user)
+            # only for test.
+            # user = self.env['ir.model'].search([('model','=',self._name)]).sce_dingtalk_config_id.test_user
+            self.dingtalk_send_action_card_message(user, title, markdown, redirect, 'pc')
+
+
 
     def _log(self, message):
         self.process_log = "%s\n[%s] %s" % (

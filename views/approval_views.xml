@@ -39,7 +39,7 @@
                     confirm="Reject this request?" attrs="{'invisible':['|',('state','!=','pending'),('is_active','=',False)]}"/>
                 <field name="state" widget="statusbar" readonly="1"/>
             </header>
-            <sheet>
+            <!--<sheet>-->
                 <div class="oe_title">
                     <h1><field name="name"/></h1>
                 </div>
@@ -47,21 +47,21 @@
                   <group>
                       <field name="requester_id"/>
                       <field name="approver_id"/>
-                      <field name="res_model"/>
                   </group>
                   <group>
                       <field name="is_active"/>
                       <field name="approve_datetime"/>
-                      <field name="res_id"/>
                   </group>
                 </group>
                 <div>
-                  <label for="action_view" string="View Data"/>
-                  <button name="action_view" type="object" class="oe_highlight">
-                      <field name="res_model_name"/>
-                  </button>
+                  <div>
+                      <label for="action_view" string="View Data"/>
+                  </div>
+                  <div>
+                      <field name="content_url" widget="iframe" width="100%" height="600" scrolling="auto"/>
+                  </div>
               </div>
-           </sheet>
+           <!--</sheet>-->
         </form>
       </field>
     </record>
@@ -73,7 +73,7 @@
       <field name="res_model">sce_workflow.approval</field>
       <field name="view_mode">tree,form</field>
       <field name="context">{'search_default_pending':1}</field>
-      <field name="domain">[('approver_id','=',uid)]</field>
+      <field name="domain">[('approver_id','=',uid),('is_active','=',True)]</field>
     </record>
 
     <record model="ir.actions.act_window" id="sce_workflow.my_process_window">

@@ -28,9 +28,10 @@
         'views/workflow_views.xml',
         'views/process_views.xml',
         'views/approval_views.xml',
+        'views/role_views.xml',
         'views/menus.xml',
+        'views/templates.xml',
         'data/cron_data.xml',
-        # 'views/templates.xml',
     ],
     # only loaded in demonstration mode
     'demo': [

@@ -1,0 +1,55 @@
+<odoo>
+  <data>
+    <!-- explicit list view definition -->
+
+    <record model="ir.ui.view" id="sce_workflow.role_tree">
+      <field name="name">workflow.role.view.tree</field>
+      <field name="model">sce_workflow.role</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="name"/>
+          <field name="res_module_name"/>
+          <field name="res_module_id"/>
+        </tree>
+      </field>
+    </record>
+
+    <!-- form view -->
+    <record model="ir.ui.view" id="sce_workflow.role_form">
+      <field name="name">workflow.role.view.form</field>
+      <field name="model">sce_workflow.role</field>
+      <field name="arch" type="xml">
+        <form>
+            <sheet>
+                <group>
+                    <group>
+                        <field name="name"/>
+                        <field name="role_type"/>
+                    </group>
+                    <group>
+                        <field name="res_module_id"/>
+                        <field name="res_module_name"/>
+                    </group>
+                </group>
+                <group>
+                    <field name="roleline_ids">
+                        <tree editable="bottom">
+                            <field name="role_person_id"/>
+                            <field name="person_range_ids" widget="many2many_tags"/>
+                        </tree>
+                    </field>
+                </group>
+            </sheet>
+        </form>
+      </field>
+    </record>
+
+    <!-- actions opening views on models -->
+    <record model="ir.actions.act_window" id="sce_workflow.role_window">
+      <field name="name">action.workflow.role.window</field>
+      <field name="res_model">sce_workflow.role</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+    
+  </data>
+</odoo>

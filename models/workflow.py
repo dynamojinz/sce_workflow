@@ -18,16 +18,17 @@ class Workflow(models.Model):
     def get_start_workitem(self):
         self.ensure_one()
         if len(self.workitem_ids)>0:
-            return self.workitem_ids[0]
+            return self.workitem_ids.sorted('sequence')[0]
         else:
             return False
 
     def get_next_workitem(self, workitem):
         self.ensure_one()
         workitem_size = len(self.workitem_ids)
-        index = self.workitem_ids.ids.index(workitem.id)
+        workitem_ids = self.workitem_ids.sorted('sequence')
+        index = workitem_ids.ids.index(workitem.id)
         if index>=0 and index<workitem_size-1:
-            return self.workitem_ids[index+1]
+            return workitem_ids[index+1]
         else:
             return False
 
@@ -51,6 +52,7 @@ class Workitem(models.Model):
     condition = fields.Char()
     # If more than one person, set to parallel approving
     person_ids = fields.Many2many('res.users')
+    role_ids = fields.Many2many('sce_workflow.role')
     # parallel type
     parallel_type = fields.Selection(selection=[
         ('AND', 'Need all approved'),
@@ -58,9 +60,10 @@ class Workitem(models.Model):
         ],default='AND')
     action_id = fields.Many2one('ir.actions.server')
     type = fields.Selection(selection=[
-        ('approval', 'Approval'),
+        ('approval', 'Approval(Person)'),
+        ('approval_role', 'Approval(Role)'),
         ('action', 'Action Server'),
-        ])
+        ], default='approval')
 
 
 
