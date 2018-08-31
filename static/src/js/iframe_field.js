@@ -20,14 +20,6 @@ var FieldIframe = basicFields.InputField.extend({
     },
 
 
-    /**
-     * @override
-     * @private
-     */
-    _renderReadonly: function () {
-        this.$el.text(this._formatValue(this.value*100.0)+"%");
-    },
-
     //--------------------------------------------------------------------------
     // Public
     //--------------------------------------------------------------------------
